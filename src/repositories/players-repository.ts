@@ -1,4 +1,5 @@
 import { PlayerModel } from "../models/player-model"
+import { StatisticsModel } from "../models/statistics-model"
 
 const database: PlayerModel[] = [
   {
@@ -7,7 +8,7 @@ const database: PlayerModel[] = [
     "club": "Paris Saint-Germain",
     "nationality": "Argentina",
     "position": "Forward",
-    "statics": {
+    "statistics": {
       "Overall": 93,
       "Pace": 85,
       "Shooting": 94,
@@ -23,7 +24,7 @@ const database: PlayerModel[] = [
     "club": "Liverpool",
     "nationality": "Brazil",
     "position": "Goalkeeper",
-    "statics": {
+    "statistics": {
       "Overall": 89,
       "Pace": 85,
       "Shooting": 85,
@@ -39,7 +40,7 @@ const database: PlayerModel[] = [
     "club": "Retired",
     "nationality": "England",
     "position": "Midfielder",
-    "statics": {
+    "statistics": {
       "Overall": 85,
       "Pace": 76,
       "Shooting": 82,
@@ -61,4 +62,29 @@ export const findPlayerById = async (id: number): Promise<PlayerModel | undefine
 
 export const insertPlayer = async (player: PlayerModel) => {
   database.push(player)
+}
+
+export const deleteOnePlayer = async (id: number) => {
+  const index = database.findIndex(player => player.id === id)
+
+  //quando não encontra.. o index é -1
+  if (index !== -1) {
+    database.splice(index, 1)
+    return true
+  }
+
+  return false
+}
+
+export const findAndModifyPlayer = async (
+  id: number,
+  statistics: StatisticsModel
+): Promise<PlayerModel> => {
+  const playerIndex = database.findIndex(player => player.id === id)
+
+  if (playerIndex !== -1) {
+    database[playerIndex].statistics = statistics
+  }
+
+  return database[playerIndex]
 }
